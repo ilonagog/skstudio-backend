@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_03_015009) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_17_214741) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -35,13 +35,27 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_03_015009) do
   end
 
   create_table "products", force: :cascade do |t|
+    t.string "category"
+    t.string "color"
     t.datetime "created_at", null: false
     t.text "description"
     t.string "image_url"
+    t.string "material"
     t.string "name"
     t.decimal "price"
     t.integer "stock_quantity"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.bigint "product_id", null: false
+    t.integer "rating"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["product_id"], name: "index_reviews_on_product_id"
+    t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -57,4 +71,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_03_015009) do
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "users"
+  add_foreign_key "reviews", "products"
+  add_foreign_key "reviews", "users"
 end
